@@ -6,7 +6,7 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if item.name != "Aged Brie" and item.name != "Backstage passes to a TAFKAL80ETC concert"
+      if !should_increase_the_older_it_gets(item)
         if item.quality > 0
           if item.name != "Sulfuras, Hand of Ragnaros"
             item.quality = item.quality - 1
@@ -50,6 +50,10 @@ class GildedRose
         end
       end
     end
+  end
+
+  def should_increase_the_older_it_gets(item)
+    item.name == "Aged Brie" or item.name.include?("Backstage passes")
   end
 
   def sell_by_date_has_passed?(item)
