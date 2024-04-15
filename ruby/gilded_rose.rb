@@ -44,19 +44,16 @@ class GildedRose
     can_increase_quality = item.quality < 50
     return unless can_increase_quality
 
-    item.quality = item.quality + 1
-    return unless is_backstage_passes?(item)
+    if is_backstage_passes?(item)
+      increase_quality_of_backstage_passes(item)
+    else
+      item.quality = item.quality + 1
+    end
+  end
 
-    if item.sell_in < 11
-      if can_increase_quality
-        item.quality = item.quality + 1
-      end
-    end
-    if item.sell_in < 6
-      if can_increase_quality
-        item.quality = item.quality + 1
-      end
-    end
+  def increase_quality_of_backstage_passes(item)
+    return item.quality = item.quality + 3 if item.sell_in <= 5
+    return item.quality = item.quality + 2 if item.sell_in <= 10
   end
 
   def decrease_quality(item)
