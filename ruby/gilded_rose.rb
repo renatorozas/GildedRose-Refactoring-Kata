@@ -11,6 +11,8 @@ class GildedRose
     end
   end
 
+  private
+
   def update_quality_for(item)
     number_of_updates = sell_by_date_has_passed?(item) ? 2 : 1
 
@@ -21,6 +23,10 @@ class GildedRose
 
   def update_sell_in_for(item)
     item.sell_in = item.sell_in - 1 if can_be_sold(item)
+  end
+
+  def sell_by_date_has_passed?(item)
+    item.sell_in <= 0
   end
 
   def should_increase_the_older_it_gets?(item)
@@ -59,10 +65,6 @@ class GildedRose
 
   def can_be_sold(item)
     item.name != "Sulfuras, Hand of Ragnaros"
-  end
-
-  def sell_by_date_has_passed?(item)
-    item.sell_in <= 0
   end
 end
 
