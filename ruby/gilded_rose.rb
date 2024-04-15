@@ -6,24 +6,10 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
-      if !should_increase_the_older_it_gets(item)
-        decrease_quality(item)
+      if should_increase_the_older_it_gets(item)
+        increase_quality(item)
       else
-        if item.quality < 50
-          item.quality = item.quality + 1
-          if item.name == "Backstage passes to a TAFKAL80ETC concert"
-            if item.sell_in < 11
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-            if item.sell_in < 6
-              if item.quality < 50
-                item.quality = item.quality + 1
-              end
-            end
-          end
-        end
+        decrease_quality(item)
       end
       update_sell_in_for(item)
       if sell_by_date_has_passed?(item)
@@ -48,6 +34,25 @@ class GildedRose
 
   def should_increase_the_older_it_gets(item)
     item.name == "Aged Brie" or item.name.include?("Backstage passes")
+  end
+
+  def increase_quality(item)
+    can_increase_quality = item.quality < 50
+    return if !can_increase_quality
+
+    item.quality = item.quality + 1
+    if item.name == "Backstage passes to a TAFKAL80ETC concert"
+      if item.sell_in < 11
+        if item.quality < 50
+          item.quality = item.quality + 1
+        end
+      end
+      if item.sell_in < 6
+        if item.quality < 50
+          item.quality = item.quality + 1
+        end
+      end
+    end
   end
 
   def decrease_quality(item)
