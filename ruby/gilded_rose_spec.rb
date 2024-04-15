@@ -4,6 +4,12 @@ require File.join(File.dirname(__FILE__), 'gilded_rose')
 
 describe GildedRose do
   describe "#update_quality" do
+    it "decreases quality by 1 when sell_in is greater than 0" do
+      items = [Item.new("foo", 1, 25)]
+      GildedRose.new(items).update_quality()
+      expect(items[0].quality).to eq 24
+    end
+
     it "decreases quality twice as fast once sell_in is 0" do
       items = [Item.new("foo", 0, 25)]
       GildedRose.new(items).update_quality()

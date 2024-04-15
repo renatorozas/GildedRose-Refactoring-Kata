@@ -32,7 +32,7 @@ class GildedRose
       if item.name != "Sulfuras, Hand of Ragnaros"
         item.sell_in = item.sell_in - 1
       end
-      if item.sell_in < 0
+      if sell_by_date_has_passed?(item)
         if item.name != "Aged Brie"
           if item.name != "Backstage passes to a TAFKAL80ETC concert"
             if item.quality > 0
@@ -50,6 +50,10 @@ class GildedRose
         end
       end
     end
+  end
+
+  def sell_by_date_has_passed?(item)
+    item.sell_in < 0
   end
 end
 
