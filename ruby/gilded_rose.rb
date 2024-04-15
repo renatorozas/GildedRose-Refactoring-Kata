@@ -6,23 +6,17 @@ class GildedRose
 
   def update_quality()
     @items.each do |item|
+      should_update_twice = sell_by_date_has_passed?(item)
+
       if should_increase_the_older_it_gets(item)
         increase_quality(item)
+        increase_quality(item) if should_update_twice
       else
         decrease_quality(item)
+        decrease_quality(item) if should_update_twice
       end
+
       update_sell_in_for(item)
-      if sell_by_date_has_passed?(item)
-        if is_aged_brie?(item)
-          if item.quality < 50
-            item.quality = item.quality + 1
-          end
-        else
-          if !is_backstage_passes?(item)
-            decrease_quality(item)
-          end
-        end
-      end
     end
   end
 
@@ -69,7 +63,7 @@ class GildedRose
   end
 
   def sell_by_date_has_passed?(item)
-    item.sell_in < 0
+    item.sell_in <= 0
   end
 end
 
