@@ -14,7 +14,7 @@ class GildedRose
       update_sell_in_for(item)
       if sell_by_date_has_passed?(item)
         if item.name != "Aged Brie"
-          if item.name != "Backstage passes to a TAFKAL80ETC concert"
+          if !is_backstage_passes?(item)
             decrease_quality(item)
           else
             item.quality = 0
@@ -33,24 +33,28 @@ class GildedRose
   end
 
   def should_increase_the_older_it_gets(item)
-    item.name == "Aged Brie" or item.name.include?("Backstage passes")
+    item.name == "Aged Brie" or is_backstage_passes?(item)
+  end
+
+  def is_backstage_passes?(item)
+    item.name.include?("Backstage passes")
   end
 
   def increase_quality(item)
     can_increase_quality = item.quality < 50
-    return if !can_increase_quality
+    return unless can_increase_quality
 
     item.quality = item.quality + 1
-    if item.name == "Backstage passes to a TAFKAL80ETC concert"
-      if item.sell_in < 11
-        if item.quality < 50
-          item.quality = item.quality + 1
-        end
+    return unless is_backstage_passes?(item)
+
+    if item.sell_in < 11
+      if can_increase_quality
+        item.quality = item.quality + 1
       end
-      if item.sell_in < 6
-        if item.quality < 50
-          item.quality = item.quality + 1
-        end
+    end
+    if item.sell_in < 6
+      if can_increase_quality
+        item.quality = item.quality + 1
       end
     end
   end
