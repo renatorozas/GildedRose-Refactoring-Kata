@@ -8,9 +8,7 @@ class GildedRose
     @items.each do |item|
       if !should_increase_the_older_it_gets(item)
         if item.quality > 0
-          if can_be_sold(item)
-            item.quality = item.quality - 1
-          end
+          decrease_quality(item)
         end
       else
         if item.quality < 50
@@ -29,19 +27,15 @@ class GildedRose
           end
         end
       end
-      if can_be_sold(item)
-        item.sell_in = item.sell_in - 1
-      end
+      update_sell_in_for(item)
       if sell_by_date_has_passed?(item)
         if item.name != "Aged Brie"
           if item.name != "Backstage passes to a TAFKAL80ETC concert"
             if item.quality > 0
-              if can_be_sold(item)
-                item.quality = item.quality - 1
-              end
+              decrease_quality(item)
             end
           else
-            item.quality = item.quality - item.quality
+            item.quality = 0
           end
         else
           if item.quality < 50
@@ -52,8 +46,16 @@ class GildedRose
     end
   end
 
+  def update_sell_in_for(item)
+    item.sell_in = item.sell_in - 1 if can_be_sold(item)
+  end
+
   def should_increase_the_older_it_gets(item)
     item.name == "Aged Brie" or item.name.include?("Backstage passes")
+  end
+
+  def decrease_quality(item)
+    item.quality = item.quality - 1 if can_be_sold(item)
   end
 
   def can_be_sold(item)
