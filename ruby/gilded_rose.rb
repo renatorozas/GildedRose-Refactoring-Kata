@@ -22,7 +22,7 @@ class GildedRose
   end
 
   def update_sell_in_for(item)
-    item.sell_in = item.sell_in - 1 if can_be_sold(item)
+    item.sell_in = item.sell_in - 1 if can_be_sold?(item)
   end
 
   def sell_by_date_has_passed?(item)
@@ -60,10 +60,10 @@ class GildedRose
 
   def decrease_quality(item)
     can_decrease_quality = item.quality > 0
-    item.quality = item.quality - 1 if can_be_sold(item) and can_decrease_quality
+    item.quality = item.quality - 1 if can_be_sold?(item) and can_decrease_quality
   end
 
-  def can_be_sold(item)
+  def can_be_sold?(item)
     item.name != "Sulfuras, Hand of Ragnaros"
   end
 end
