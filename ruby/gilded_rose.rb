@@ -8,7 +8,7 @@ class GildedRose
     @items.each do |item|
       if !should_increase_the_older_it_gets(item)
         if item.quality > 0
-          if item.name != "Sulfuras, Hand of Ragnaros"
+          if can_be_sold(item)
             item.quality = item.quality - 1
           end
         end
@@ -29,14 +29,14 @@ class GildedRose
           end
         end
       end
-      if item.name != "Sulfuras, Hand of Ragnaros"
+      if can_be_sold(item)
         item.sell_in = item.sell_in - 1
       end
       if sell_by_date_has_passed?(item)
         if item.name != "Aged Brie"
           if item.name != "Backstage passes to a TAFKAL80ETC concert"
             if item.quality > 0
-              if item.name != "Sulfuras, Hand of Ragnaros"
+              if can_be_sold(item)
                 item.quality = item.quality - 1
               end
             end
@@ -54,6 +54,10 @@ class GildedRose
 
   def should_increase_the_older_it_gets(item)
     item.name == "Aged Brie" or item.name.include?("Backstage passes")
+  end
+
+  def can_be_sold(item)
+    item.name != "Sulfuras, Hand of Ragnaros"
   end
 
   def sell_by_date_has_passed?(item)
