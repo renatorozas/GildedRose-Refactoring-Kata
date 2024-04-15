@@ -13,15 +13,15 @@ class GildedRose
       end
       update_sell_in_for(item)
       if sell_by_date_has_passed?(item)
-        if item.name != "Aged Brie"
+        if is_aged_brie?(item)
+          if item.quality < 50
+            item.quality = item.quality + 1
+          end
+        else
           if !is_backstage_passes?(item)
             decrease_quality(item)
           else
             item.quality = 0
-          end
-        else
-          if item.quality < 50
-            item.quality = item.quality + 1
           end
         end
       end
@@ -33,7 +33,11 @@ class GildedRose
   end
 
   def should_increase_the_older_it_gets(item)
-    item.name == "Aged Brie" or is_backstage_passes?(item)
+    is_aged_brie?(item) or is_backstage_passes?(item)
+  end
+
+  def is_aged_brie?(item)
+    item.name == "Aged Brie"
   end
 
   def is_backstage_passes?(item)
